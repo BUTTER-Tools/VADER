@@ -195,12 +195,14 @@ namespace VADER
         public void ImportSettings(Dictionary<string, string> SettingsDict)
         {
             includeSentenceText = Boolean.Parse(SettingsDict["IncludeSentenceText"]);
+            useBuiltInSentenceSplitter = Boolean.Parse(SettingsDict["useBuiltInSentenceSplitter"]);
         }
 
         public Dictionary<string, string> ExportSettings(bool suppressWarnings)
         {
             Dictionary<string, string> SettingsDict = new Dictionary<string, string>();
             SettingsDict.Add("IncludeSentenceText", includeSentenceText.ToString());
+            SettingsDict.Add("useBuiltInSentenceSplitter", includeSentenceText.ToString());
             return (SettingsDict);
         }
         #endregion
