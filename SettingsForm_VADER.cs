@@ -37,7 +37,7 @@ namespace VADER
         {
 
             this.useBuiltInSentenceSplitter = UseBuiltInSentenceSplitterCheckbox.Checked;
-            this.includeSentenceText = !IncludeTextCheckbox.Checked;
+            this.includeSentenceText = IncludeTextCheckbox.Checked;
            
             this.DialogResult = DialogResult.OK;
 

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Drawing;
+﻿using OutputHelperLib;
 using PluginContracts;
-using OutputHelperLib;
-using System.Text.RegularExpressions;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using VaderSharp;
 
 
