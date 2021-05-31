@@ -26,18 +26,14 @@ namespace VADER
                                                                                                         {5, "Negative_M"},
                                                                                                         {6, "Neutral_M"},
                                                                                                         {7, "SentenceText"} };
-
-        private bool IncludeSentenceText { get; set; } = true;
-
         public bool InheritHeader { get; } = false;
-
-        private Regex SentenceSplitter = new Regex(@"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)\s", RegexOptions.Compiled);
+        
 
         #region Plugin Details and Info
 
         public string PluginName { get; } = "VADER";
         public string PluginType { get; } = "Sentiment Analysis";
-        public string PluginVersion { get; } = "1.0.3";
+        public string PluginVersion { get; } = "1.1.0";
         public string PluginAuthor { get; } = "Ryan L. Boyd (ryan@ryanboyd.io)";
         public string PluginDescription { get; } = "Sentiment analysis for Twitter data. Outputs sentence-level sentiment scores." + Environment.NewLine + Environment.NewLine +
             "https://github.com/cjhutto/vaderSentiment" + Environment.NewLine + Environment.NewLine +
@@ -59,16 +55,27 @@ namespace VADER
 
 
 
+        //settings for this plugin
+        private Regex SentenceSplitter = new Regex(@"(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|\!)\s", RegexOptions.Compiled);
+        private bool includeSentenceText { get; set; } = true;
+        private bool useBuiltInSentenceSplitter { get; set; } = true;
+
+
         public void ChangeSettings()
         {
 
-            if (MessageBox.Show("Do you want to include the text from each sentence in your output?", "Include Text?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            using (var form = new SettingsForm_VADER(builtInSplitter: useBuiltInSentenceSplitter, textInOutput: includeSentenceText))
             {
-                IncludeSentenceText = true;
-            }
-            else
-            {
-                IncludeSentenceText = false;
+
+
+                form.Icon = Properties.Resources.icon;
+
+                var result = form.ShowDialog();
+                if (result == DialogResult.OK)
+                {
+                    useBuiltInSentenceSplitter = form.useBuiltInSentenceSplitter;
+                    includeSentenceText = form.includeSentenceText;
+                }
             }
 
         }
@@ -97,7 +104,16 @@ namespace VADER
             for (int counter = 0; counter < Input.StringList.Count; counter++)
             {
 
-                string[] Sentences = SentenceSplitter.Split(Input.StringList[counter]).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+                string[] Sentences;
+                if (useBuiltInSentenceSplitter)
+                {
+                    Sentences = SentenceSplitter.Split(Input.StringList[counter]).Where(x => !string.IsNullOrWhiteSpace(x)).ToArray();
+                }
+                else
+                {
+                    Sentences = new string[] { Input.StringList[counter] };
+                }
+
                 int TotalStringLength = Input.StringList[counter].Split().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray().Length;
 
 
@@ -134,7 +150,7 @@ namespace VADER
                     ResultsArray[4] = results.Positive.ToString();
                     ResultsArray[5] = results.Negative.ToString();
                     ResultsArray[6] = results.Neutral.ToString();
-                    if (IncludeSentenceText) ResultsArray[7] = Sentences[i].Trim();
+                    if (includeSentenceText) ResultsArray[7] = Sentences[i].Trim();
 
                     pData.StringArrayList.Add(ResultsArray);
                     pData.SegmentNumber.Add(Input.SegmentNumber[counter]);
@@ -178,13 +194,13 @@ namespace VADER
         #region Import/Export Settings
         public void ImportSettings(Dictionary<string, string> SettingsDict)
         {
-            IncludeSentenceText = Boolean.Parse(SettingsDict["IncludeSentenceText"]);
+            includeSentenceText = Boolean.Parse(SettingsDict["IncludeSentenceText"]);
         }
 
         public Dictionary<string, string> ExportSettings(bool suppressWarnings)
         {
             Dictionary<string, string> SettingsDict = new Dictionary<string, string>();
-            SettingsDict.Add("IncludeSentenceText", IncludeSentenceText.ToString());
+            SettingsDict.Add("IncludeSentenceText", includeSentenceText.ToString());
             return (SettingsDict);
         }
         #endregion
