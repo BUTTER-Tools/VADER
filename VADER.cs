@@ -33,7 +33,7 @@ namespace VADER
 
         public string PluginName { get; } = "VADER";
         public string PluginType { get; } = "Sentiment Analysis";
-        public string PluginVersion { get; } = "1.1.0";
+        public string PluginVersion { get; } = "1.1.01";
         public string PluginAuthor { get; } = "Ryan L. Boyd (ryan@ryanboyd.io)";
         public string PluginDescription { get; } = "Sentiment analysis for Twitter data. Outputs sentence-level sentiment scores." + Environment.NewLine + Environment.NewLine +
             "https://github.com/cjhutto/vaderSentiment" + Environment.NewLine + Environment.NewLine +
@@ -215,7 +215,7 @@ namespace VADER
         {
             Dictionary<string, string> SettingsDict = new Dictionary<string, string>();
             SettingsDict.Add("IncludeSentenceText", includeSentenceText.ToString());
-            SettingsDict.Add("useBuiltInSentenceSplitter", includeSentenceText.ToString());
+            SettingsDict.Add("useBuiltInSentenceSplitter", useBuiltInSentenceSplitter.ToString());
             return (SettingsDict);
         }
         #endregion
