@@ -33,7 +33,7 @@ namespace VADER
 
         public string PluginName { get; } = "VADER";
         public string PluginType { get; } = "Sentiment Analysis";
-        public string PluginVersion { get; } = "1.1.01";
+        public string PluginVersion { get; } = "1.1.02";
         public string PluginAuthor { get; } = "Ryan L. Boyd (ryan@ryanboyd.io)";
         public string PluginDescription { get; } = "Sentiment analysis for Twitter data. Outputs sentence-level sentiment scores." + Environment.NewLine + Environment.NewLine +
             "https://github.com/cjhutto/vaderSentiment" + Environment.NewLine + Environment.NewLine +
@@ -116,10 +116,8 @@ namespace VADER
 
                 int TotalStringLength = Input.StringList[counter].Split().Where(x => !string.IsNullOrWhiteSpace(x)).ToArray().Length;
 
-
                 SentimentIntensityAnalyzer VADERAnalyzer = new SentimentIntensityAnalyzer();
                 VaderSharp.SentimentAnalysisResults results = new VaderSharp.SentimentAnalysisResults();
-
 
                 for (int i = 0; i < Sentences.Length; i++)
                 {
@@ -143,7 +141,6 @@ namespace VADER
                     }
 
 
-                    ResultsArray[1] = (i + 1).ToString();
                     ResultsArray[2] = "";
 
                     if (results.Compound > 0.05)
