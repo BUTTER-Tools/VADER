@@ -130,6 +130,19 @@ namespace VADER
 
                     //Pull together our results
                     ResultsArray[0] = Sentence_WC.ToString();
+
+                    if (useBuiltInSentenceSplitter)
+                    {
+                        ResultsArray[1] = (i + 1).ToString();
+                    }
+                    else
+                    {
+                        //if we're using an external sentence tokenizer, then every segment is
+                        //going to be treated as its own sentence.
+                        ResultsArray[1] = (counter + 1).ToString();
+                    }
+
+
                     ResultsArray[1] = (i + 1).ToString();
                     ResultsArray[2] = "";
 
